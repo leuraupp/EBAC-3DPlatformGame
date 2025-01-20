@@ -3,9 +3,28 @@ using Ebac.StateMachine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Player")]
     public StateMachine<PlayerState> stateMachine;
+    public CharacterController characterController;
+
+    [Header("Movement")]
+    public float speed = 1f;
+    public float turnSpeed = 1f;
+
+    [Header("Jump")]
+    public KeyCode jumpKey = KeyCode.Space;
+    public float jumpForce = 15f;
+    public float gravity = 9.8f;
+
+    [Header("Animation")]
+    public Animator animator;
+
+    [Header("Run")]
+    public KeyCode runKey = KeyCode.LeftShift;
+    public float runSpeed = 1.5f;
 
     private bool isJumping = false;
+    private float vSpeed = 0f;
 
     public enum PlayerState {
         Idle,
@@ -23,28 +42,50 @@ public class Player : MonoBehaviour
     }
 
     private void Update() {
-        float horizontal = Input.GetAxis("Horizontal");
+        transform.Rotate(0, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
+
         float vertical = Input.GetAxis("Vertical");
-        Vector3 movement = new Vector3(horizontal, 0, vertical);
-        transform.position += movement * Time.deltaTime * 5f;
+        var speedVector = transform.forward * vertical * speed;
+
+        if (characterController.isGrounded) {
+            vSpeed = 0;
+            if (Input.GetKeyDown(jumpKey)) {
+                vSpeed = jumpForce;
+            }
+            isJumping = false;
+        } else {
+            isJumping = true;
+        }
+
+        vSpeed -= gravity * Time.deltaTime;
+        speedVector.y = vSpeed;
+
+        var isWalking = vertical != 0;
+        if (isWalking) {
+            if (Input.GetKey(runKey)) {
+                speedVector *= runSpeed;
+                animator.speed = runSpeed;
+            } else {
+                animator.speed = 1;
+            }
+        }
+
+        characterController.Move(speedVector * Time.deltaTime);
+
+        if (vertical != 0) {
+            animator.SetBool("Run", true);
+        } else {
+            animator.SetBool("Run", false);
+        }
+
         if (!isJumping) {
-            if (movement != Vector3.zero) {
+            if (vertical != 0) {
                 stateMachine.SwitchState(PlayerState.Walk);
             } else {
                 stateMachine.SwitchState(PlayerState.Idle);
             }
         } else {
             stateMachine.SwitchState(PlayerState.Jump);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && !isJumping) {
-            GetComponent<Rigidbody>().AddForce(Vector3.up * 5f, ForceMode.Impulse);
-        }
-
-        if (IsGrounded()) {
-            isJumping = false;
-        } else {
-            isJumping = true;
         }
     }
     private bool IsGrounded() {
