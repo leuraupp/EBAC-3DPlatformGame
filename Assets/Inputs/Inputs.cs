@@ -35,6 +35,33 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseWeapon1"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce608a54-3a38-4e8c-af92-8128e75fd9d9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseWeapon2"",
+                    ""type"": ""Button"",
+                    ""id"": ""96a6620e-64f8-48c2-a520-73ff69ae606e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChooseWeapon3"",
+                    ""type"": ""Button"",
+                    ""id"": ""2db99cd0-d7ed-4589-b0ec-a553a0864d4f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -48,6 +75,39 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f463d83-b42e-4807-9e7d-dc87eb5bbe35"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseWeapon1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b90eb96f-4bc2-46dd-9eb6-fea92ba6e92a"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseWeapon2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0a0902d-1fad-4a83-997f-f5031fe3c4c7"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChooseWeapon3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -57,6 +117,9 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         // Gameplay
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
+        m_Gameplay_ChooseWeapon1 = m_Gameplay.FindAction("ChooseWeapon1", throwIfNotFound: true);
+        m_Gameplay_ChooseWeapon2 = m_Gameplay.FindAction("ChooseWeapon2", throwIfNotFound: true);
+        m_Gameplay_ChooseWeapon3 = m_Gameplay.FindAction("ChooseWeapon3", throwIfNotFound: true);
     }
 
     ~@Inputs()
@@ -124,11 +187,17 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gameplay;
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Shoot;
+    private readonly InputAction m_Gameplay_ChooseWeapon1;
+    private readonly InputAction m_Gameplay_ChooseWeapon2;
+    private readonly InputAction m_Gameplay_ChooseWeapon3;
     public struct GameplayActions
     {
         private @Inputs m_Wrapper;
         public GameplayActions(@Inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
+        public InputAction @ChooseWeapon1 => m_Wrapper.m_Gameplay_ChooseWeapon1;
+        public InputAction @ChooseWeapon2 => m_Wrapper.m_Gameplay_ChooseWeapon2;
+        public InputAction @ChooseWeapon3 => m_Wrapper.m_Gameplay_ChooseWeapon3;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -141,6 +210,15 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
+            @ChooseWeapon1.started += instance.OnChooseWeapon1;
+            @ChooseWeapon1.performed += instance.OnChooseWeapon1;
+            @ChooseWeapon1.canceled += instance.OnChooseWeapon1;
+            @ChooseWeapon2.started += instance.OnChooseWeapon2;
+            @ChooseWeapon2.performed += instance.OnChooseWeapon2;
+            @ChooseWeapon2.canceled += instance.OnChooseWeapon2;
+            @ChooseWeapon3.started += instance.OnChooseWeapon3;
+            @ChooseWeapon3.performed += instance.OnChooseWeapon3;
+            @ChooseWeapon3.canceled += instance.OnChooseWeapon3;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -148,6 +226,15 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
+            @ChooseWeapon1.started -= instance.OnChooseWeapon1;
+            @ChooseWeapon1.performed -= instance.OnChooseWeapon1;
+            @ChooseWeapon1.canceled -= instance.OnChooseWeapon1;
+            @ChooseWeapon2.started -= instance.OnChooseWeapon2;
+            @ChooseWeapon2.performed -= instance.OnChooseWeapon2;
+            @ChooseWeapon2.canceled -= instance.OnChooseWeapon2;
+            @ChooseWeapon3.started -= instance.OnChooseWeapon3;
+            @ChooseWeapon3.performed -= instance.OnChooseWeapon3;
+            @ChooseWeapon3.canceled -= instance.OnChooseWeapon3;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -168,5 +255,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     public interface IGameplayActions
     {
         void OnShoot(InputAction.CallbackContext context);
+        void OnChooseWeapon1(InputAction.CallbackContext context);
+        void OnChooseWeapon2(InputAction.CallbackContext context);
+        void OnChooseWeapon3(InputAction.CallbackContext context);
     }
 }
