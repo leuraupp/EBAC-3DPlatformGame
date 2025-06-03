@@ -1,7 +1,9 @@
 using UnityEngine;
 using Ebac.StateMachine;
+using NUnit.Framework;
+using System.Collections.Generic;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     [Header("Player")]
     public StateMachine<PlayerState> stateMachine;
@@ -25,6 +27,9 @@ public class Player : MonoBehaviour
 
     private bool isJumping = false;
     private float vSpeed = 0f;
+
+    [Header("Flash")]
+    public List<FlashColor> flashColor;
 
     public enum PlayerState {
         Idle,
@@ -98,5 +103,13 @@ public class Player : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void Damage(float damage) {
+        flashColor.ForEach(f => f.Flash());
+    }
+
+    public void Damage(float damage, Vector3 dir) {
+        flashColor.ForEach(f => f.Flash());
     }
 }
