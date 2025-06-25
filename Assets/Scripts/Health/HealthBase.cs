@@ -1,8 +1,10 @@
 using Animation;
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthBase : MonoBehaviour
+public class HealthBase : MonoBehaviour, IDamageable
 {
     public float startLife = 100f;
     public bool destroyOnKill = false;
@@ -12,6 +14,8 @@ public class HealthBase : MonoBehaviour
     public Action<HealthBase> OnDamage;
     public Action<HealthBase> OnKill;
 
+    public List<UIFillUpdater> uiFills;
+
     private void Awake() {
         Init();
     }
@@ -20,7 +24,7 @@ public class HealthBase : MonoBehaviour
         ResetLife();
     }
 
-    protected void ResetLife() {
+    public void ResetLife() {
         currentLife = startLife;
     }
 
@@ -41,6 +45,17 @@ public class HealthBase : MonoBehaviour
         if (currentLife <= 0) {
             Kill();
         }
+        UpdateUI();
         OnDamage?.Invoke(this);
+    }
+
+    public void Damage(float damage, Vector3 dir) {
+        Damage(damage);
+    }
+
+    private void UpdateUI() {
+        if (uiFills != null) {
+            uiFills.ForEach(u => u.UpdateValue((float) currentLife / startLife));
+        }
     }
 }

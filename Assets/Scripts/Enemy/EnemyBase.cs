@@ -94,7 +94,7 @@ namespace Enemy {
         private void OnCollisionEnter(Collision collision) {
             Player p = collision.gameObject.GetComponent<Player>();
             if (p != null) {
-                p.Damage(10f);
+                p.healthBase.Damage(10f);
             }
         }
 

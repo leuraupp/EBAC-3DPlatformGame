@@ -3,8 +3,10 @@ using Ebac.StateMachine;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-public class Player : MonoBehaviour, IDamageable
+public class Player : MonoBehaviour//, IDamageable
 {
+    public List<Collider> colliders;
+
     [Header("Player")]
     public StateMachine<PlayerState> stateMachine;
     public CharacterController characterController;
@@ -27,9 +29,26 @@ public class Player : MonoBehaviour, IDamageable
 
     private bool isJumping = false;
     private float vSpeed = 0f;
+    private bool isAlive = true;
 
     [Header("Flash")]
     public List<FlashColor> flashColor;
+
+    [Header("Health")]
+    public HealthBase healthBase;
+
+    private void OnValidate() {
+        if (healthBase == null) {
+            healthBase = GetComponent<HealthBase>();
+        }
+    }
+
+    private void Awake() {
+        OnValidate();
+
+        healthBase.OnDamage += Damage;
+        healthBase.OnKill += Kill;
+    }
 
     public enum PlayerState {
         Idle,
@@ -62,7 +81,7 @@ public class Player : MonoBehaviour, IDamageable
             isJumping = true;
         }
 
-        vSpeed -= gravity * Time.deltaTime;
+        vSpeed -= gravity * 2f *Time.deltaTime;
         speedVector.y = vSpeed;
 
         var isWalking = vertical != 0;
@@ -75,7 +94,9 @@ public class Player : MonoBehaviour, IDamageable
             }
         }
 
-        characterController.Move(speedVector * Time.deltaTime);
+        if (characterController.enabled) {
+            characterController.Move(speedVector * Time.deltaTime);
+        }
 
         if (vertical != 0) {
             animator.SetBool("Run", true);
@@ -105,11 +126,35 @@ public class Player : MonoBehaviour, IDamageable
         return false;
     }
 
-    public void Damage(float damage) {
+    [NaughtyAttributes.Button("Kill")]
+    public void Kill(HealthBase h) {
+        if (isAlive) {
+            isAlive = false;
+            animator.SetTrigger("Death");
+            colliders.ForEach(c => c.enabled = false);
+            Invoke(nameof(Revive), 3f);
+        }
+    }
+
+    private void Revive() {
+        isAlive = true;
+        animator.SetTrigger("Revive");
+        healthBase.ResetLife();
+        Respawn();
+        colliders.ForEach(c => c.enabled = true);
+    }
+
+    public void Damage(HealthBase h) {
         flashColor.ForEach(f => f.Flash());
     }
 
     public void Damage(float damage, Vector3 dir) {
         flashColor.ForEach(f => f.Flash());
+    }
+
+    public void Respawn() {
+        if (CheckpointsManager.Instance.HasCheckpoint()) {
+            transform.position = CheckpointsManager.Instance.GetPositionFromLastCheckpoint();
+        }
     }
 }
