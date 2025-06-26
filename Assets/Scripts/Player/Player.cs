@@ -146,6 +146,8 @@ public class Player : MonoBehaviour//, IDamageable
 
     public void Damage(HealthBase h) {
         flashColor.ForEach(f => f.Flash());
+        EffectsManager.Instance.TakeDamageEffect();
+        EffectsManager.Instance.CameraShake(3f, 3f, 0.5f);
     }
 
     public void Damage(float damage, Vector3 dir) {
