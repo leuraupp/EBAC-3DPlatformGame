@@ -1,9 +1,9 @@
 using UnityEngine;
 using Ebac.StateMachine;
-using NUnit.Framework;
 using System.Collections.Generic;
+using Ebac.Core.Singleton;
 
-public class Player : MonoBehaviour//, IDamageable
+public class Player : Singleton<Player>//, IDamageable
 {
     public List<Collider> colliders;
 
@@ -43,7 +43,8 @@ public class Player : MonoBehaviour//, IDamageable
         }
     }
 
-    private void Awake() {
+    protected override void Awake() {
+        base.Awake();
         OnValidate();
 
         healthBase.OnDamage += Damage;
