@@ -7,7 +7,7 @@ namespace Enemy {
         protected override void Init() {
             base.Init();
 
-            gun.StartShoot();
+            gun.StartShoot(null);
         }
     }
 }

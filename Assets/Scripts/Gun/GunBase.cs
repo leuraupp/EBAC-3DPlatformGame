@@ -13,7 +13,7 @@ public class GunBase : MonoBehaviour
 
     private Coroutine _currentCoroutine;
 
-    protected virtual IEnumerator ShootCoroutine() {
+    protected virtual IEnumerator ShootCoroutine(UIFillUpdater uiGun) {
         while (true) {
             Shoot();
             yield return new WaitForSeconds(timeBetweenShoots);
@@ -27,9 +27,9 @@ public class GunBase : MonoBehaviour
         projectile.speed = speedProjectile;
     }
 
-    public void StartShoot() {
+    public void StartShoot(UIFillUpdater uiGun) {
         StopShoot();
-        _currentCoroutine = StartCoroutine(ShootCoroutine());
+        _currentCoroutine = StartCoroutine(ShootCoroutine(uiGun));
     }
 
     public void StopShoot() {

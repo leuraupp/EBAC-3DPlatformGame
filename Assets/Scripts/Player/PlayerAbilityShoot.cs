@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAbilityShoot : PlayerAbilityBase
 {
+    public UIFillUpdater uiGunUpdater;
     public List<GunBase> gunBases;
     public Transform gunPosition;
 
@@ -32,7 +33,7 @@ public class PlayerAbilityShoot : PlayerAbilityBase
     }
 
     private void StartShoot() {
-        currentGun.StartShoot();
+        currentGun.StartShoot(uiGunUpdater);
     }
 
     private void CancelShoot() {

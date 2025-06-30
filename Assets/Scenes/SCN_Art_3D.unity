@@ -11483,6 +11483,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698b3c86ffc4c534ebcf47af245f86bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiGunUpdater: {fileID: 1193015710}
   gunBases:
   - {fileID: 7841763509780189664, guid: 6a89fafb8ae24c3409069f2c6694acbd, type: 3}
   - {fileID: 4226761070688419494, guid: 88e9655f68011454eba5b8a4e1a1e8f7, type: 3}
