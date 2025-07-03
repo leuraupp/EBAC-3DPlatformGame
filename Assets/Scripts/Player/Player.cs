@@ -78,13 +78,21 @@ public class Player : Singleton<Player>//, IDamageable
         var speedVector = transform.forward * vertical * speed;
 
         if (characterController.isGrounded) {
+            if (isJumping) {
+                isJumping = false;
+                animator.SetTrigger("Land");
+            }
+
             vSpeed = 0;
             if (Input.GetKeyDown(jumpKey)) {
                 vSpeed = jumpForce;
+
+                if (!isJumping) {
+                    isJumping = true;
+                    animator.SetTrigger("Jump");
+                }
+
             }
-            isJumping = false;
-        } else {
-            isJumping = true;
         }
 
         vSpeed -= gravity * 2f *Time.deltaTime;
