@@ -2,6 +2,8 @@ using UnityEngine;
 using Ebac.StateMachine;
 using System.Collections.Generic;
 using Ebac.Core.Singleton;
+using System.Collections;
+using Cloth;
 
 public class Player : Singleton<Player>//, IDamageable
 {
@@ -36,6 +38,9 @@ public class Player : Singleton<Player>//, IDamageable
 
     [Header("Health")]
     public HealthBase healthBase;
+
+    [Space] 
+    [SerializeField] private ClothChanger clothChanger;
 
     private void OnValidate() {
         if (healthBase == null) {
@@ -160,4 +165,43 @@ public class Player : Singleton<Player>//, IDamageable
             transform.position = CheckpointsManager.Instance.GetPositionFromLastCheckpoint();
         }
     }
+
+    public void ChangeSpeed(float newSpeed, float duration) {
+        StartCoroutine(ChangeSpeedCoroutine(newSpeed, duration));
+    }
+
+    IEnumerator ChangeSpeedCoroutine(float newSpeed, float duration) {
+        var defaultSpeed = speed;
+        speed = newSpeed;
+        animator.speed = newSpeed;
+        yield return new WaitForSeconds(duration);
+        speed = defaultSpeed;
+        animator.speed = defaultSpeed;
+    }
+
+    public void ChangeGravity(float newGravity, float newJumpForce, float duration) {
+        StartCoroutine(ChangeGravityCoroutine(newGravity, newJumpForce, duration));
+    }
+
+    IEnumerator ChangeGravityCoroutine(float newGravity, float newJumpForce, float duration) {
+        var defaultGravity = gravity;
+        var defaultJumpForce = jumpForce;
+        gravity = newGravity;
+        jumpForce = newJumpForce;
+        yield return new WaitForSeconds(duration);
+        gravity = defaultGravity;
+        jumpForce = defaultJumpForce;
+    }
+
+    public void ChangeTexture(ClothSetup clothSetup, float duration) {
+        StartCoroutine(ChangeTextureCoroutine(clothSetup, duration));
+    }
+
+    IEnumerator ChangeTextureCoroutine(ClothSetup clothSetup, float duration) {
+        clothChanger.ChangeTexture(clothSetup);
+        yield return new WaitForSeconds(duration);
+        clothChanger.ResetTexture();
+    }
+
+
 }
