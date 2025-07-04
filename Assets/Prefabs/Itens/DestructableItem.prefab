@@ -89,7 +89,7 @@ MonoBehaviour:
   shakeDuration: 0.1
   shakeForce: 1
   coinsToDrop: 10
-  coinPrefab: {fileID: 6025263698960919522, guid: b86dd32fe1cdbe44089decd8f43c6439, type: 3}
+  coinPrefab: {fileID: 1777402150393618807, guid: b32e8765788c17143b4ef6f821c1338e, type: 3}
   dropPosition: {fileID: 8837802234223813775}
 --- !u!1 &8837802234223813775
 GameObject:
@@ -116,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 8837802234223813775}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.63, z: 0}
+  m_LocalPosition: {x: -0.919, y: 0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

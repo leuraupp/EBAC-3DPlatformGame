@@ -15,6 +15,7 @@ namespace Items {
 
         private void Start() {
             OnReset();
+            Invoke(nameof(LoadItems), 0.1f);
         }
 
         private void OnReset() {
@@ -23,6 +24,11 @@ namespace Items {
 
         public void AddByType(ItemType itemType, int amount = 1) {
             itemSetups.Find(i => i.itemType == itemType).SOInt.value += amount;
+
+            if (itemType == ItemType.COIN)
+                SaveManager.Instance.SavePlayerCoins(itemSetups.Find(i => i.itemType == ItemType.COIN).SOInt.value);
+            else if (itemType == ItemType.LIFE_PACK)
+                SaveManager.Instance.SavePlayerHealth(itemSetups.Find(i => i.itemType == ItemType.LIFE_PACK).SOInt.value);
         }
 
         public ItemSetup GetItemByType(ItemType itemType, int amount = 1) {
@@ -38,6 +44,13 @@ namespace Items {
             if (item.SOInt.value < 0) {
                 item.SOInt.value = 0;
             }
+        }
+
+        public void LoadItems() {
+            Debug.Log("Loading items from SaveManager");
+            Debug.Log($"Coins: {SaveManager.Instance}");
+            AddByType(ItemType.COIN, (int)SaveManager.Instance.LoadPlayerCoins());
+            AddByType(ItemType.LIFE_PACK, (int)SaveManager.Instance.LoadPlayerHealth());
         }
     }
 

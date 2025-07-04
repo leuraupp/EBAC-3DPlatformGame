@@ -38,6 +38,7 @@ public class ChestBase : MonoBehaviour {
 
     private void ShowItem() {
         chestItem.ShowItem();
+
         Invoke(nameof(CollectItem), 1f);
     }
 

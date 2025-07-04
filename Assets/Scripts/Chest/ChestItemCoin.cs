@@ -34,6 +34,8 @@ public class ChestItemCoin : ChestItemBase
     public override void CollectItem() {
         base.CollectItem();
 
+        Items.ItemManager.Instance.AddByType(Items.ItemType.COIN, amount);
+
         foreach (var item in items) {
             item.transform.DOMoveY(2f, tweenEndTime).SetRelative();
             item.transform.DOScale(0, tweenEndTime /2).SetDelay(tweenEndTime / 2);
