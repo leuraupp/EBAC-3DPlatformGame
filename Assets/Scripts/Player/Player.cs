@@ -9,6 +9,8 @@ public class Player : Singleton<Player>//, IDamageable
 {
     public List<Collider> colliders;
 
+    public SFXType sfxType = SFXType.JUMP;
+
     [Header("Player")]
     public StateMachine<PlayerState> stateMachine;
     public CharacterController characterController;
@@ -90,6 +92,7 @@ public class Player : Singleton<Player>//, IDamageable
 
             vSpeed = 0;
             if (Input.GetKeyDown(jumpKey)) {
+                PlaySFX();
                 vSpeed = jumpForce;
 
                 if (!isJumping) {
@@ -133,6 +136,11 @@ public class Player : Singleton<Player>//, IDamageable
             stateMachine.SwitchState(PlayerState.Jump);
         }
     }
+
+    private void PlaySFX() {
+        SFXPool.Instance.Play(sfxType);
+    }
+
     private bool IsGrounded() {
         RaycastHit hit;
         float raycastDistance = 1f;

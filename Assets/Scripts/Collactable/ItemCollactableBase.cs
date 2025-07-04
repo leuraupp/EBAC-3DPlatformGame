@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Items {
     public class ItemCollactableBase : MonoBehaviour {
 
+        public SFXType sfxType;
         public ItemType itemType;
         public string compareTag = "Player";
         public ParticleSystem particleSystem;
@@ -21,6 +22,10 @@ namespace Items {
             }
         }
 
+        private void PlaySFX() {
+            SFXPool.Instance.Play(sfxType);
+        }
+
         private void OnTriggerEnter(Collider collision) {
             if (collision.transform.CompareTag(compareTag)) {
                 Collect();
@@ -28,6 +33,7 @@ namespace Items {
         }
 
         protected virtual void Collect() {
+            PlaySFX();
             if (graphicItem != null) {
                 graphicItem.SetActive(false);
             }

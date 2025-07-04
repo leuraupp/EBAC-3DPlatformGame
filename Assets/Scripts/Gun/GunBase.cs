@@ -7,6 +7,8 @@ public class GunBase : MonoBehaviour
     [Header("Projectile Config")]
     public ProjectileBase prefabProjectile;
 
+    public SFXType sfxType = SFXType.GUN;
+
     public Transform positionToShoot;
     public float timeBetweenShoots = .1f;
     public float speedProjectile = 50f;
@@ -20,7 +22,12 @@ public class GunBase : MonoBehaviour
         }
     }
 
+    private void PlaySFX() {
+        SFXPool.Instance.Play(sfxType);
+    }
+
     public virtual void Shoot() {
+        PlaySFX();
         var projectile = Instantiate(prefabProjectile);
         projectile.transform.position = positionToShoot.position;
         projectile.transform.rotation = positionToShoot.rotation;
