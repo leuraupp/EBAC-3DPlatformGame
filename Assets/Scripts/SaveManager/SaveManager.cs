@@ -38,11 +38,25 @@ public class SaveManager : Singleton<SaveManager> {
         saveData.playerCoins = coins;
         Save();
     }
+    public void SavePlayerItemHealth(float itemHealth) {
+        if (saveData == null) {
+            CreateNewSave();
+        }
+        saveData.playerItemHealth = itemHealth;
+        Save();
+    }
     public void SavePlayerHealth(float health) {
         if (saveData == null) {
             CreateNewSave();
         }
         saveData.playerHealth = health;
+        Save();
+    }
+    public void SaveLastCheckpoint(int checkpoint) {
+        if (saveData == null) {
+            CreateNewSave();
+        }
+        saveData.lastCheckpoint = checkpoint;
         Save();
     }
 
@@ -54,13 +68,39 @@ public class SaveManager : Singleton<SaveManager> {
 
     #region Load
     public int LoadPlayerLevel() {
-        return saveData.playerLevel;
+        if (saveData == null) {
+            return 0;
+        } else {
+            return saveData.playerLevel;
+        }
     }
     public float LoadPlayerCoins() {
-        return saveData.playerCoins;
+        if (saveData == null) {
+            return 0;
+        } else {
+            return saveData.playerCoins;
+        }
+    }
+    public float LoadPlayerItemHealth() {
+        if (saveData == null) {
+            return 0;
+        } else {
+            return saveData.playerItemHealth;
+        }
     }
     public float LoadPlayerHealth() {
-        return saveData.playerHealth;
+        if (saveData == null) {
+            return 100;
+        } else {
+            return saveData.playerHealth;
+        }
+    }
+    public int LoadLastCheckpoint() {
+        if (saveData == null) {
+            return 0;
+        } else {
+            return saveData.lastCheckpoint;
+        }
     }
 
     public void Load() {
@@ -75,12 +115,14 @@ public class SaveManager : Singleton<SaveManager> {
     }
     #endregion
 
-    private void CreateNewSave() {
+    public void CreateNewSave() {
         saveData = new SaveData {
             playerName = "Player",
             playerLevel = 1,
             playerCoins = 0f,
-            playerHealth = 100f
+            playerItemHealth = 0f,
+            playerHealth = 100f,
+            lastCheckpoint = 0
         };
     }
 
@@ -95,5 +137,7 @@ public class SaveData
     public string playerName;
     public int playerLevel;
     public float playerCoins;
+    public float playerItemHealth;
     public float playerHealth;
+    public int lastCheckpoint;
 }

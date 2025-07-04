@@ -24,6 +24,10 @@ public class HealthBase : MonoBehaviour, IDamageable
         ResetLife();
     }
 
+    public float GetCurrentLife() {
+        return currentLife;
+    }
+
     public void ResetLife() {
         currentLife = startLife;
         UpdateUI();
@@ -58,5 +62,11 @@ public class HealthBase : MonoBehaviour, IDamageable
         if (uiFills != null) {
             uiFills.ForEach(u => u.UpdateValue((float) currentLife / startLife));
         }
+    }
+
+    public void LoadHealth() {
+        Debug.Log("Loading health from SaveManager");
+        currentLife = SaveManager.Instance.LoadPlayerHealth();
+        UpdateUI();
     }
 }

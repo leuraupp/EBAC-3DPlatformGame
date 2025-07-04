@@ -15,6 +15,7 @@ public class CheckpointsManager : Singleton<CheckpointsManager> {
 
     private void Start() {
         originalColor = checkpointText.color;
+        LoadLastCheckpoint();
     }
 
     public void SaveCheckpoint(int i) {
@@ -22,6 +23,7 @@ public class CheckpointsManager : Singleton<CheckpointsManager> {
             lastCheckpoint = i;
             checkpointText.DOColor(new Color(originalColor.r, originalColor.g, originalColor.b, 1f), 0.1f);
             Invoke(nameof(HideMessage), 2f);
+            SaveManager.Instance.SaveLastCheckpoint(lastCheckpoint);
         }
     }
 
@@ -37,5 +39,12 @@ public class CheckpointsManager : Singleton<CheckpointsManager> {
         var checkpoint = checkpoints.Find(x => x.key == lastCheckpoint);
 
         return checkpoint != null ? checkpoint.transform.position : Vector3.zero;
+    }
+
+    public void LoadLastCheckpoint() {
+        if (SaveManager.Instance != null && SaveManager.Instance.LoadLastCheckpoint() > 0) {
+            lastCheckpoint = SaveManager.Instance.LoadLastCheckpoint();
+            GetPositionFromLastCheckpoint();
+        }
     }
 }

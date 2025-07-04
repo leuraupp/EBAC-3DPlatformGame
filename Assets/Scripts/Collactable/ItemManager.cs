@@ -50,7 +50,7 @@ namespace Items {
             Debug.Log("Loading items from SaveManager");
             Debug.Log($"Coins: {SaveManager.Instance}");
             AddByType(ItemType.COIN, (int)SaveManager.Instance.LoadPlayerCoins());
-            AddByType(ItemType.LIFE_PACK, (int)SaveManager.Instance.LoadPlayerHealth());
+            AddByType(ItemType.LIFE_PACK, (int)SaveManager.Instance.LoadPlayerItemHealth());
         }
     }
 

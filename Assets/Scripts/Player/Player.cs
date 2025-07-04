@@ -69,6 +69,11 @@ public class Player : Singleton<Player>//, IDamageable
         stateMachine.RegisterState(PlayerState.Idle, new PlayerStateIdle());
         stateMachine.RegisterState(PlayerState.Walk, new PlayerStateRun());
         stateMachine.RegisterState(PlayerState.Jump, new PlayerStateJump());
+
+        if (SaveManager.Instance.LoadLastCheckpoint() > 0) {
+            Respawn();
+        }
+        healthBase.LoadHealth();
     }
 
     private void Update() {
@@ -162,6 +167,7 @@ public class Player : Singleton<Player>//, IDamageable
         flashColor.ForEach(f => f.Flash());
         EffectsManager.Instance.TakeDamageEffect();
         EffectsManager.Instance.CameraShake(3f, 3f, 0.5f);
+        SaveManager.Instance.SavePlayerHealth(h.GetCurrentLife());
     }
 
     public void Damage(float damage, Vector3 dir) {
